@@ -19,6 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
               VerticalAlignment="Top">
@@ -81,13 +82,13 @@
                 <ColumnDefinition Width="6*" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Image Visibility="{Binding Path=ImageLoaded, Mode=OneWay, 
+            <Image Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=BoolVisibilityConverter}}"
                    Source="{Binding Path=Image, Mode=OneWay}" />
             <Label Grid.Column="0"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   Visibility="{Binding Path=ImageLoaded, Mode=OneWay, 
+                   Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=OpositeBoolVisibilityConverter}}"
                    Content="{Binding Path=DownloadingMessage, Mode=OneWay}" />
             <StackPanel Grid.Column="1"
@@ -112,13 +113,13 @@
                 <ColumnDefinition Width="6*" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <MediaElement Visibility="{Binding Path=ImageLoaded, Mode=OneWay, 
+            <MediaElement Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=BoolVisibilityConverter}}"
                           Source="{Binding Path=VideoUrl, Mode=OneWay}" />
             <Label Grid.Column="0"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   Visibility="{Binding Path=ImageLoaded, Mode=OneWay, 
+                   Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=OpositeBoolVisibilityConverter}}"
                    Content="{Binding Path=DownloadingMessage, Mode=OneWay}" />
             <StackPanel Grid.Column="1"
@@ -134,6 +135,17 @@
             </StackPanel>
 
         </Grid>
-
+        <StatusBar Grid.Row="3">
+            <StatusBarItem>
+                <Label>
+                    Project Website: 
+                </Label>
+            </StatusBarItem>
+            <StatusBarItem>
+                <Label>
+                    https://github.com/hussamite/InstaDownloader
+                </Label>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

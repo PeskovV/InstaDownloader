@@ -19,7 +19,7 @@ namespace InstaDownloader
         {
             DownloadCommand = new DelegateCommand(DownloadCommandExecute, DownloadCommandCanExecute);
             SaveImageCommand = new DelegateCommand(SaveImageCommandExecute, SaveImageCommandCanExecute);
-            ImageLoaded = true;
+            ContentLoaded = true;
         }
 
         #region Commands
@@ -30,12 +30,9 @@ namespace InstaDownloader
 
         private async void DownloadCommandExecute()
         {
-            ImageLoaded = false;
+            ContentLoaded = false;
             Image = null;
             var document = new HtmlWeb().Load(Url);
-            var imageNode = document.DocumentNode.SelectNodes("//meta")
-                .FirstOrDefault(x => x.Attributes.Contains("property")
-                                && x.Attributes["property"].Value == "og:image");
             var typeNode = document.DocumentNode.SelectNodes("//meta")
                 .FirstOrDefault(x => x.Attributes.Contains("property")
                                 && x.Attributes["property"].Value == "og:type");
@@ -46,13 +43,16 @@ namespace InstaDownloader
                     : MediaType.Image;
             }
 
-            if (imageNode != null)
+            if (MediaType == MediaType.Image)
             {
+                var imageNode = document.DocumentNode.SelectNodes("//meta")
+                .FirstOrDefault(x => x.Attributes.Contains("property")
+                                && x.Attributes["property"].Value == "og:image");
+
                 var imageUrl = imageNode.Attributes["content"].Value;
 
                 Image = LoadImage(await DownloadImage(imageUrl));
-                ImageLoaded = true;
-                OnPropertyChanged(nameof(ImageLoaded));
+                ContentLoaded = true;
             }
             if (MediaType == MediaType.Video)
             {
@@ -60,6 +60,7 @@ namespace InstaDownloader
                 .FirstOrDefault(x => x.Attributes.Contains("property")
                                 && x.Attributes["property"].Value == "og:video");
                 VideoUrl = videoNode.Attributes["content"].Value;
+                ContentLoaded = true;
 
             }
 
@@ -126,7 +127,7 @@ namespace InstaDownloader
 
         private bool SaveImageCommandCanExecute()
         {
-            return ImageLoaded && Image != null;
+            return ContentLoaded && Image != null;
         }
 
         #endregion
@@ -138,7 +139,7 @@ namespace InstaDownloader
 
         private BitmapImage _image;
         private string _url;
-        private bool _imageLoaded;
+        private bool _contentLoaded;
         private MediaType _mediaType;
 
         public string Url
@@ -161,13 +162,13 @@ namespace InstaDownloader
             }
         }
         
-        public bool ImageLoaded
+        public bool ContentLoaded
         {
-            get { return _imageLoaded; }
+            get { return _contentLoaded; }
             set
             {
-                _imageLoaded = value;
-                OnPropertyChanged(nameof(ImageLoaded));
+                _contentLoaded = value;
+                OnPropertyChanged(nameof(ContentLoaded));
             }
         }
 
