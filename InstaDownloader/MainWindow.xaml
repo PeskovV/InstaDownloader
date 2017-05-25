@@ -1,0 +1,139 @@
+﻿<Window x:Class="InstaDownloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:InstaDownloader.Converters"
+        xmlns:instaDownloader="clr-namespace:InstaDownloader"
+        mc:Ignorable="d"
+        Title="InstaDownloader"
+        Icon="Images/932e4d9af891.png"
+        WindowState="Maximized">
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolVisibilityConverter" />
+        <converters:OpositeBoolToVisibilityConverter x:Key="OpositeBoolVisibilityConverter" />
+        <converters:MediaTypeVisibilityConverter x:Key="MediaTypeVisibilityConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0"
+              VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="1"
+                   Content="Instagram Image/Video URL:"
+                   VerticalAlignment="Center"
+                   Foreground="#FF8C35A6" />
+            <TextBox Grid.Column="2"
+                     TabIndex="0"
+                     Margin="5,0"
+                     VerticalAlignment="Center"
+                     VerticalContentAlignment="Center"
+                     Text="{Binding Path=Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Foreground="#FFE94551"
+                     BorderBrush="#FFA82DB4" />
+            <Button Grid.Column="3"
+                    Command="{Binding Path=DownloadCommand}"
+                    VerticalAlignment="Center"
+                    Margin="5,0"
+                    Content="Download"
+                    Background="#FFA82DB4"
+                    Foreground="White"
+                    BorderBrush="#FFFB8113"
+                    Cursor="Hand"
+                    IsDefault="True" />
+            <Image Grid.Column="0"
+                   Source="Images/932e4d9af891.png" />
+        </Grid>
+        <Rectangle HorizontalAlignment="Stretch"
+                   Height="3"
+                   Grid.Row="1"
+                   Margin="0,10">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.007,0.403"
+                                     StartPoint="0.996,0.644">
+                    <GradientStop Color="#FFA82DB4"
+                                  Offset="0.25" />
+                    <GradientStop Color="#FFFFBC47"
+                                  Offset="0.75" />
+                    <GradientStop Color="#FFE73A5B"
+                                  Offset="0.5" />
+                    <GradientStop Color="#0CA82DB4" />
+                    <GradientStop Color="#00FFBC47"
+                                  Offset="1" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Grid Grid.Row="2"
+              Visibility="{Binding Path=MediaType, Mode=OneWay, 
+                Converter={StaticResource ResourceKey=MediaTypeVisibilityConverter}, 
+                ConverterParameter={x:Static instaDownloader:MediaType.Image}}"
+              Background="#FFE7E8EC">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Image Visibility="{Binding Path=ImageLoaded, Mode=OneWay, 
+                Converter={StaticResource ResourceKey=BoolVisibilityConverter}}"
+                   Source="{Binding Path=Image, Mode=OneWay}" />
+            <Label Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Visibility="{Binding Path=ImageLoaded, Mode=OneWay, 
+                Converter={StaticResource ResourceKey=OpositeBoolVisibilityConverter}}"
+                   Content="{Binding Path=DownloadingMessage, Mode=OneWay}" />
+            <StackPanel Grid.Column="1"
+                        Margin="5,0"
+                        Orientation="Vertical">
+                <Button Command="{Binding SaveImageCommand}"
+                        VerticalAlignment="Center"
+                        Content="Save"
+                        Background="#FF179311"
+                        Foreground="White"
+                        BorderBrush="#FFFB8113"
+                        Cursor="Hand" />
+            </StackPanel>
+
+        </Grid>
+        <Grid Grid.Row="2"
+              Visibility="{Binding Path=MediaType, Mode=OneWay, 
+                Converter={StaticResource ResourceKey=MediaTypeVisibilityConverter}, 
+                ConverterParameter={x:Static instaDownloader:MediaType.Video}}"
+              Background="#FFE7E8EC">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <MediaElement Visibility="{Binding Path=ImageLoaded, Mode=OneWay, 
+                Converter={StaticResource ResourceKey=BoolVisibilityConverter}}"
+                          Source="{Binding Path=VideoUrl, Mode=OneWay}" />
+            <Label Grid.Column="0"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   Visibility="{Binding Path=ImageLoaded, Mode=OneWay, 
+                Converter={StaticResource ResourceKey=OpositeBoolVisibilityConverter}}"
+                   Content="{Binding Path=DownloadingMessage, Mode=OneWay}" />
+            <StackPanel Grid.Column="1"
+                        Margin="5,0"
+                        Orientation="Vertical">
+                <Button Command="{Binding SaveImageCommand}"
+                        VerticalAlignment="Center"
+                        Content="Save"
+                        Background="#FF179311"
+                        Foreground="White"
+                        BorderBrush="#FFFB8113"
+                        Cursor="Hand" />
+            </StackPanel>
+
+        </Grid>
+
+    </Grid>
+</Window>
