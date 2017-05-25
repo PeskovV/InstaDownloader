@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -18,7 +17,7 @@ namespace InstaDownloader
         public InstaDownloaderViewModel()
         {
             DownloadCommand = new DelegateCommand(DownloadCommandExecute, DownloadCommandCanExecute);
-            SaveImageCommand = new DelegateCommand(SaveImageCommandExecute, SaveImageCommandCanExecute);
+            SaveCommand = new DelegateCommand(SaveCommandExecute, SaveCommandCanExecute);
             ContentLoaded = true;
         }
 
@@ -32,6 +31,7 @@ namespace InstaDownloader
         {
             ContentLoaded = false;
             Image = null;
+            Busy = true;
             var document = new HtmlWeb().Load(Url);
             var typeNode = document.DocumentNode.SelectNodes("//meta")
                 .FirstOrDefault(x => x.Attributes.Contains("property")
@@ -51,7 +51,7 @@ namespace InstaDownloader
 
                 var imageUrl = imageNode.Attributes["content"].Value;
 
-                Image = LoadImage(await DownloadImage(imageUrl));
+                Image = LoadImage(await DownloadBytes(imageUrl));
                 ContentLoaded = true;
             }
             if (MediaType == MediaType.Video)
@@ -61,18 +61,18 @@ namespace InstaDownloader
                                 && x.Attributes["property"].Value == "og:video");
                 VideoUrl = videoNode.Attributes["content"].Value;
                 ContentLoaded = true;
-
             }
+            Busy = false;
 
         }
 
-        private async Task<byte[]> DownloadImage(string imageUrl)
+        private async Task<byte[]> DownloadBytes(string url)
         {
             return await Task.Run(() =>
             {
                 using (var clien = new WebClient())
                 {
-                    return clien.DownloadData(imageUrl);
+                    return clien.DownloadData(url);
                 }
             });
         }
@@ -102,32 +102,51 @@ namespace InstaDownloader
 
         #endregion
 
-        #region SaveImageCommand
+        #region SaveCommand
 
-        public ICommand SaveImageCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
 
-        private void SaveImageCommandExecute()
+        private async void SaveCommandExecute()
         {
-            var dialog = new SaveFileDialog();
+            var dialog = new SaveFileDialog
+            {
+                Filter = MediaType == MediaType.Image
+                    ? "JPEG Image (.jpeg)|*.jpeg"
+                    : "MP4 Video (.mp4)|*.mp4"
+            };
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
-                byte[] data;
-                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(Image));
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    encoder.Save(ms);
-                    data = ms.ToArray();
-                }
+                var data = await GetMediaBytes();
                 File.WriteAllBytes(dialog.FileName, data);
             }
 
         }
 
-        private bool SaveImageCommandCanExecute()
+        private async Task<byte[]> GetMediaBytes()
         {
-            return ContentLoaded && Image != null;
+            Busy = true;
+            if (MediaType == MediaType.Image)
+            {
+                byte[] data;
+                var encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(Image));
+                using (var ms = new MemoryStream())
+                {
+                    encoder.Save(ms);
+                    data = ms.ToArray();
+                }
+                return data;
+            }
+            var result = await DownloadBytes(VideoUrl);
+            Busy = false;
+            return result;
+        }
+
+        private bool SaveCommandCanExecute()
+        {
+            return ContentLoaded && (MediaType == MediaType.Image && Image != null
+                                     || MediaType == MediaType.Video && !string.IsNullOrEmpty(VideoUrl));
         }
 
         #endregion
@@ -205,6 +224,18 @@ namespace InstaDownloader
             {
                 _videoUrl = value;
                 OnPropertyChanged(nameof(VideoUrl));
+            }
+        }
+
+        private bool _busy;
+
+        public bool Busy
+        {
+            get { return _busy; }
+            set
+            {
+                _busy = value;
+                OnPropertyChanged(nameof(Busy));
             }
         }
 

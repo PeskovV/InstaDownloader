@@ -22,6 +22,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
+              Margin="5"
               VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
@@ -74,78 +75,94 @@
             </Rectangle.Fill>
         </Rectangle>
         <Grid Grid.Row="2"
-              Visibility="{Binding Path=MediaType, Mode=OneWay, 
+              Margin="5">
+            <Grid Visibility="{Binding Path=MediaType, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=MediaTypeVisibilityConverter}, 
                 ConverterParameter={x:Static instaDownloader:MediaType.Image}}"
-              Background="#FFE7E8EC">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Image Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
+                  Background="#FFE7E8EC">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Image Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=BoolVisibilityConverter}}"
-                   Source="{Binding Path=Image, Mode=OneWay}" />
-            <Label Grid.Column="0"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
+                       Source="{Binding Path=Image, Mode=OneWay}" />
+                <Label Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=OpositeBoolVisibilityConverter}}"
-                   Content="{Binding Path=DownloadingMessage, Mode=OneWay}" />
-            <StackPanel Grid.Column="1"
-                        Margin="5,0"
-                        Orientation="Vertical">
-                <Button Command="{Binding SaveImageCommand}"
-                        VerticalAlignment="Center"
-                        Content="Save"
-                        Background="#FF179311"
-                        Foreground="White"
-                        BorderBrush="#FFFB8113"
-                        Cursor="Hand" />
-            </StackPanel>
+                       Content="{Binding Path=DownloadingMessage, Mode=OneWay}" />
+                <StackPanel Grid.Column="1"
+                            Margin="5,0"
+                            Orientation="Vertical">
+                    <Button Command="{Binding SaveCommand}"
+                            VerticalAlignment="Center"
+                            Content="Save"
+                            Background="#FF179311"
+                            Foreground="White"
+                            BorderBrush="#FFFB8113"
+                            Cursor="Hand" />
+                </StackPanel>
 
-        </Grid>
-        <Grid Grid.Row="2"
-              Visibility="{Binding Path=MediaType, Mode=OneWay, 
+            </Grid>
+            <Grid Visibility="{Binding Path=MediaType, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=MediaTypeVisibilityConverter}, 
                 ConverterParameter={x:Static instaDownloader:MediaType.Video}}"
-              Background="#FFE7E8EC">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*" />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <MediaElement Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
+                  Background="#FFE7E8EC">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <MediaElement Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=BoolVisibilityConverter}}"
-                          Source="{Binding Path=VideoUrl, Mode=OneWay}" />
-            <Label Grid.Column="0"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
+                              Source="{Binding Path=VideoUrl, Mode=OneWay}" />
+                <Label Grid.Column="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                 Converter={StaticResource ResourceKey=OpositeBoolVisibilityConverter}}"
-                   Content="{Binding Path=DownloadingMessage, Mode=OneWay}" />
-            <StackPanel Grid.Column="1"
-                        Margin="5,0"
-                        Orientation="Vertical">
-                <Button Command="{Binding SaveImageCommand}"
-                        VerticalAlignment="Center"
-                        Content="Save"
-                        Background="#FF179311"
-                        Foreground="White"
-                        BorderBrush="#FFFB8113"
-                        Cursor="Hand" />
-            </StackPanel>
+                       Content="{Binding Path=DownloadingMessage, Mode=OneWay}" />
+                <StackPanel Grid.Column="1"
+                            Margin="5,0"
+                            Orientation="Vertical">
+                    <Button Command="{Binding SaveCommand}"
+                            VerticalAlignment="Center"
+                            Content="Save"
+                            Background="#FF179311"
+                            Foreground="White"
+                            BorderBrush="#FFFB8113"
+                            Cursor="Hand" />
+                </StackPanel>
 
+            </Grid>
         </Grid>
         <StatusBar Grid.Row="3">
             <StatusBarItem>
                 <Label>
-                    Project Website: 
+                    Project Website:
                 </Label>
             </StatusBarItem>
             <StatusBarItem>
-                <Label>
-                    https://github.com/hussamite/InstaDownloader
+                <Label Foreground="Blue">           
+                    <Hyperlink NavigateUri="https://github.com/hussamite/InstaDownloader"
+                               RequestNavigate="Hyperlink_OnRequestNavigate">
+                        InstaDownloader Github
+                    </Hyperlink>
                 </Label>
             </StatusBarItem>
+            <StatusBarItem>
+                <Label>           
+                    Hussam Kwedir: h.kwedir@gmail.com
+                </Label>
+            </StatusBarItem>
+
+            <StatusBarItem HorizontalAlignment="Right" Visibility="{Binding Path=Busy, Mode=OneWay, Converter={StaticResource ResourceKey= BoolVisibilityConverter}}">
+                <Label>           
+                    Downloading media ...
+                </Label>
+            </StatusBarItem>
+            
         </StatusBar>
     </Grid>
 </Window>
