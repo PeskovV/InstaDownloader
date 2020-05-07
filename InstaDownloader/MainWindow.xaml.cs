@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Windows.Navigation;
+using InstaDownloader.ViewModels;
 
 namespace InstaDownloader
 {
@@ -12,12 +13,6 @@ namespace InstaDownloader
         {
             InitializeComponent();
             DataContext = new InstaDownloaderViewModel();
-        }
-
-        private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
-            e.Handled = true;
         }
     }
 }
