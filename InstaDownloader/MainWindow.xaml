@@ -9,7 +9,7 @@
         xmlns:views="clr-namespace:InstaDownloader.Views"
         mc:Ignorable="d"
         Title="InstaDownloader"
-        Icon="Images/icon.png"
+        Icon="Images/icon_mini.png"
         x:Name="Window"
         Height="581"
         MinHeight="581"

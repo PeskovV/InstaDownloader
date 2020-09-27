@@ -172,7 +172,7 @@
     <Resource Include="Images\932e4d9af891.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\icon.png">
+    <Resource Include="Images\icon_mini.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
