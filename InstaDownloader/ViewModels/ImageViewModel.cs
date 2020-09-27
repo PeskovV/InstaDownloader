@@ -4,7 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using InstaDownloader.Utils;
+using Microsoft.Win32;
 
 namespace InstaDownloader.ViewModels
 {
@@ -26,6 +29,40 @@ namespace InstaDownloader.ViewModels
             }
             image.Freeze();
             return image;
+        }
+
+        public override void AddAuthor()
+        {
+            if(!string.IsNullOrWhiteSpace(Description) && !string.IsNullOrWhiteSpace(Author))
+            {
+                Description += Environment.NewLine;
+                Description = string.Concat(Description, $"Автор фото: @{Author}");
+            }
+        }
+
+        public override void Save()
+        {
+            var dialog = new SaveFileDialog
+            {
+                Filter = "JPEG Image (.jpeg)|*.jpeg",
+                FileName = $"photo_{Author}"
+            };
+            var result = dialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                File.WriteAllBytes(dialog.FileName, Data);
+            }
+        }
+
+        public override void CopyContent()
+        {
+            Clipboard.Clear();
+            var ms = new MemoryStream(Data);
+            var bmp = new BitmapImage();
+            bmp.BeginInit();
+            bmp.StreamSource = ms;
+            bmp.EndInit();
+            Clipboard.SetImage(bmp);
         }
     }
 }

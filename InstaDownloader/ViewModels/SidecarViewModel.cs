@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,16 +9,29 @@ namespace InstaDownloader.ViewModels
 {
     public class SidecarViewModel : ContentViewModel
     {
-        private List<string> _urls;
+        private ObservableCollection<ContentViewModel> _contents;
+        private Dictionary<string, byte[]> _content;
 
-        public List<string> Urls
+        public ObservableCollection<ContentViewModel> Contents
         {
-            get => _urls;
+            get => _contents;
             set
             {
-                _urls = value;
-                OnPropertyChanged(nameof(Urls));
+                _contents = value;
+                OnPropertyChanged(nameof(Contents));
             }
         }
+
+        public Dictionary<string, byte[]> Content
+        {
+            get => _content;
+            set
+            {
+                _content = value;
+                OnPropertyChanged(nameof(Content));
+            }
+        }
+
+        public List<byte[]> Images => Content?.Values.ToList();
     }
 }

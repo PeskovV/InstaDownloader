@@ -4,9 +4,25 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:InstaDownloader.Views"
+             xmlns:converters="clr-namespace:InstaDownloader.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolVisibilityConverter" />
+    </UserControl.Resources>
+    <ItemsControl ItemsSource="{Binding Contents}">
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Image x:Name="Image" 
+                       Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
+               Converter={StaticResource ResourceKey=BoolVisibilityConverter}}"
+                       Source="{Binding Path=Url, Mode=OneWay}" />
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <WrapPanel/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
 </UserControl>

@@ -16,29 +16,13 @@ using System.Windows.Shapes;
 namespace InstaDownloader.Views
 {
     /// <summary>
-    /// Interaction logic for VideoControl.xaml
+    /// Interaction logic for ContentControl.xaml
     /// </summary>
-    public partial class VideoControl : UserControl
+    public partial class ContentControl : UserControl
     {
-        public VideoControl()
+        public ContentControl()
         {
             InitializeComponent();
-            Video.Pause();
-        }
-
-        private void Play_OnClick(object sender, RoutedEventArgs e)
-        {
-            Video.Play();
-        }
-
-        private void Pause_OnClick(object sender, RoutedEventArgs e)
-        {
-            Video.Pause();
-        }
-
-        private void Stop_OnClick(object sender, RoutedEventArgs e)
-        {
-            Video.Stop();
         }
     }
 }

@@ -21,20 +21,44 @@ namespace InstaDownloader.ViewModels
         private ContentViewModel _content;
         private string _contentPath;
         private bool _contentLoaded;
+        private string _finalPhrase;
         private readonly HttpClient _client;
         private bool _busy;
+        private bool _defaultCopy;
 
         public InstaDownloaderViewModel()
         {
-            DownloadCommand = new RelayCommand(x => DownloadCommandExecute(), x => DownloadCommandCanExecute());
-            SaveCommand = new RelayCommand(x => SaveCommandExecute(), x => SaveCommandCanExecute());
-            CopyCommand = new RelayCommand(CopyCommandExecute, x => CopyCommandCanExecute());
+            DownloadCommand = new RelayCommand(DownloadCommandExecute);
+            SaveCommand = new RelayCommand(x => SaveCommandExecute());
+            CopyCommand = new RelayCommand(CopyCommandExecute, CopyCommandCanExecute);
+            DefaultCopy = true;
             _client = new HttpClient();
         }
 
         public ICommand DownloadCommand { get; set; }
         public ICommand CopyCommand { get; set; }
         public ICommand SaveCommand { get; set; }
+
+        public string FinalPhrase
+        {
+            get => _finalPhrase;
+            set
+            {
+                _finalPhrase = value;
+                OnPropertyChanged(nameof(FinalPhrase));
+                Content?.AddDescription(_finalPhrase);
+            }
+        }
+
+        public bool DefaultCopy
+        {
+            get => _defaultCopy;
+            set
+            {
+                _defaultCopy = value;
+                OnPropertyChanged(nameof(DefaultCopy));
+            }
+        }
 
         public ContentViewModel Content
         {
@@ -76,19 +100,23 @@ namespace InstaDownloader.ViewModels
             }
         }
 
-        private async void DownloadCommandExecute()
+        private async void DownloadCommandExecute(object obj)
         {
             ContentLoaded = false;
             Busy = true;
             await GetReferences(ContentPath);
+            await Content.DownloadBytes(_client);
+            ContentLoaded = true;
+            Content.AddDescription(FinalPhrase);
             switch (Content.MediaType)
             {
                 case MediaType.GraphSidecar:
                     break;
                 case MediaType.GraphImage:
+                    if (DefaultCopy)
+                        CopyCommandExecute(null);
+                    break;
                 case MediaType.GraphVideo:
-                    await Content.DownloadBytes(_client);
-                    ContentLoaded = true;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -100,34 +128,26 @@ namespace InstaDownloader.ViewModels
 
         private async Task GetReferences(string url)
         {
+            var index = url.LastIndexOf('/');
+            url = url.Substring(0, index + 1);
             if (string.IsNullOrWhiteSpace(url))
                 return;
             _instaMedia = await GetModel(url);
             switch (_instaMedia.Graphql.ShortcodeMedia.Typename)
             {
                 case MediaType.GraphSidecar:
-                    GetSidecarReferences(_instaMedia);
+                    Content = CreateViewModel<SidecarViewModel>(MediaType.GraphSidecar, false);
                     break;
                 case MediaType.GraphImage:
-                    Content = new ImageViewModel
-                    {
-                        MediaType = MediaType.GraphImage,
-                        Url = GetImageReference(_instaMedia),
-                        Author = _instaMedia.Graphql.ShortcodeMedia.Owner.Username,
-                        Description = _instaMedia.Graphql.ShortcodeMedia.EdgeMediaToCaption.Edges.FirstOrDefault()?.Node.Text
-                    };
+                    Content = CreateViewModel<ImageViewModel>(MediaType.GraphImage, false);
                     break;
                 case MediaType.GraphVideo:
-                    Content = new VideoViewModel
-                    {
-                        MediaType = MediaType.GraphVideo,
-                        Url = GetVideoReference(_instaMedia),
-                        Author = _instaMedia.Graphql.ShortcodeMedia.Owner.Username,
-                        Description = _instaMedia.Graphql.ShortcodeMedia.EdgeMediaToCaption.Edges.FirstOrDefault()?.Node.Text
-                    };
+                    Content = CreateViewModel<VideoViewModel>(MediaType.GraphVideo, true);
+                    Content.IsVideo = true;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            Content.ConcatAuthor();
             OnPropertyChanged(nameof(Content));
         }
 
@@ -135,6 +155,18 @@ namespace InstaDownloader.ViewModels
         {
             var result = await _client.GetStringAsync($"{url}?__a=1");
             return InstaMedia.FromJson(result);
+        }
+
+        private T CreateViewModel<T>(MediaType type, bool isVideo) where T : ContentViewModel, new()
+        {
+            return new T
+            {
+                MediaType = type,
+                Url = isVideo ? GetVideoReference(_instaMedia) : GetImageReference(_instaMedia),
+                Author = _instaMedia.Graphql.ShortcodeMedia.Owner.Username,
+                Description = _instaMedia.Graphql.ShortcodeMedia.EdgeMediaToCaption.Edges.FirstOrDefault()?.Node.Text,
+                Location = _instaMedia.Graphql.ShortcodeMedia.Location?.Name
+            };
         }
 
         private List<string> GetSidecarReferences(InstaMedia model)
@@ -165,34 +197,16 @@ namespace InstaDownloader.ViewModels
 
         private void SaveCommandExecute()
         {
-            var dialog = new SaveFileDialog
-            {
-                Filter = Content.MediaType == MediaType.GraphImage
-                    ? "JPEG Image (.jpeg)|*.jpeg"
-                    : "MP4 Video (.mp4)|*.mp4"
-            };
-            var result = dialog.ShowDialog();
-            if (result.HasValue && result.Value)
-            {
-                var data = GetMediaBytes();
-                File.WriteAllBytes(dialog.FileName, data);
-            }
+            Busy = true;
+            Content.Save();
+            Busy = true;
         }
 
         private bool SaveCommandCanExecute() => Content?.Data != null;
 
-        private void CopyCommandExecute(object element)
-        {
-            Clipboard.Clear();
-            var ms = new MemoryStream(Content.Data);
-            var bmp = new BitmapImage();
-            bmp.BeginInit();
-            bmp.StreamSource = ms;
-            bmp.EndInit();
-            Clipboard.SetImage(bmp);
-        }
+        private void CopyCommandExecute(object element) => Content.CopyContent();
 
-        private bool CopyCommandCanExecute() => Content?.Data != null && Content?.MediaType == MediaType.GraphImage;
+        private bool CopyCommandCanExecute(object obj) => Content?.Data != null && Content?.MediaType == MediaType.GraphImage;
 
         private byte[] GetMediaBytes()
         {
