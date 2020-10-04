@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Documents\Git\InstaDownloader" t="IncludeFlat">
+      <e p="InstaDownloader" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="App.xaml" t="Include" />
+        <e p="App.xaml.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Commands" t="Include">
+          <e p="RelayCommand.cs" t="Include" />
+        </e>
+        <e p="Converters" t="Include">
+          <e p="BoolToVisibilityConverter.cs" t="Include" />
+          <e p="MediaTypeVisibilityConverter.cs" t="Include" />
+          <e p="OpositeBoolToVisibilityConverter.cs" t="Include" />
+        </e>
+        <e p="Images" t="Include">
+          <e p="932e4d9af891.png" t="Include" />
+          <e p="icon_mini.png" t="Include" />
+        </e>
+        <e p="InstaDownloader.csproj" t="IncludeRecursive" />
+        <e p="MainWindow.xaml" t="Include" />
+        <e p="MainWindow.xaml.cs" t="Include" />
+        <e p="MediaControlTemplateSelector.cs" t="Include" />
+        <e p="Models" t="Include">
+          <e p="ContentModel.cs" t="Include" />
+          <e p="InstaMedia.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="App.g.cs" t="Include" />
+            <e p="GeneratedInternalTypeHelper.g.cs" t="Include" />
+            <e p="MainWindow.g.cs" t="Include" />
+            <e p="Views" t="Include">
+              <e p="ContentControl.g.cs" t="Include" />
+              <e p="FinalPhrases.g.cs" t="Include" />
+              <e p="ImageControl.g.cs" t="Include" />
+              <e p="SidecarControl.g.cs" t="Include" />
+              <e p="VideoControl.g.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="Annotations.cs" t="Include" />
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="Utils" t="Include">
+          <e p="MediaType.cs" t="Include" />
+        </e>
+        <e p="ViewModels" t="Include">
+          <e p="BaseViewModel.cs" t="Include" />
+          <e p="ContentViewModel.cs" t="Include" />
+          <e p="ImageViewModel.cs" t="Include" />
+          <e p="InstaDownloaderViewModel.cs" t="Include" />
+          <e p="SidecarViewModel.cs" t="Include" />
+          <e p="VideoViewModel.cs" t="Include" />
+        </e>
+        <e p="Views" t="Include">
+          <e p="ContentControl.xaml" t="Include" />
+          <e p="ContentControl.xaml.cs" t="Include" />
+          <e p="FinalPhrases.xaml" t="Include" />
+          <e p="FinalPhrases.xaml.cs" t="Include" />
+          <e p="ImageControl.xaml" t="Include" />
+          <e p="ImageControl.xaml.cs" t="Include" />
+          <e p="SidecarControl.xaml" t="Include" />
+          <e p="SidecarControl.xaml.cs" t="Include" />
+          <e p="VideoControl.xaml" t="Include" />
+          <e p="VideoControl.xaml.cs" t="Include" />
+        </e>
+      </e>
+      <e p="InstaDownloader.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+    <e p="C:\Users\peskov\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\peskov\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_InstaDownloader.1791945995.00" t="ExcludeRecursive" />
+    <e p="C:\Users\peskov\AppData\Roaming\JetBrains\Rider2020.2\consoles\db" t="IncludeRecursive" />
+    <e p="C:\Users\peskov\AppData\Roaming\JetBrains\Rider2020.2\extensions" t="IncludeRecursive" />
+    <e p="C:\Users\peskov\AppData\Roaming\JetBrains\Rider2020.2\scratches" t="IncludeRecursive" />
+  </component>
+</project>

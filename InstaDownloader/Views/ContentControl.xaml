@@ -60,7 +60,8 @@
                 <Button Content="Copy"
                         Grid.Column="1"
                         Margin="5,0,0,0"
-                        Command="{Binding Content.CopyTextCommand}"/>
+                        Command="{Binding Content.CopyTextCommand}"
+                        CommandParameter="{Binding Content.ModifiedAuthor}"/>
             </Grid>
 
             <Grid Grid.Row="1"
@@ -76,7 +77,8 @@
                 <Button Content="Copy"
                         Grid.Column="1"
                         Margin="5,0,0,0"
-                        Command="{Binding Content.CopyTextCommand}"/>
+                        Command="{Binding Content.CopyTextCommand}"
+                        CommandParameter="{Binding Content.Location}"/>
             </Grid>
 
             <TextBox MinWidth="15"
