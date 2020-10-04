@@ -36,6 +36,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock://C:/Documents/Git/InstaDownloader/InstaDownloader/Views/ContentControl.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Documents/Git/InstaDownloader/InstaDownloader/Views/ContentControl.xaml" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/InstaDownloader/Views/ContentControl.xaml" />
+        <option value="$PROJECT_DIR$/InstaDownloader/ViewModels/ContentViewModel.cs" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectId" id="1iPGUPW5TxcvkTnSFah5yHiY4W5" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
@@ -78,8 +90,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1601801831480</updated>
-      <workItem from="1601801836405" duration="359000" />
+      <workItem from="1601801836405" duration="672000" />
     </task>
+    <task id="LOCAL-00001" summary="#8&#10;- Исправлены кнопки копирования Username и Location">
+      <created>1601802459322</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1601802459322</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -100,6 +120,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="#8&#10;- Исправлены кнопки копирования Username и Location" />
+    <option name="LAST_COMMIT_MESSAGE" value="#8&#10;- Исправлены кнопки копирования Username и Location" />
   </component>
   <component name="WindowStateProjectService">
     <state width="1865" height="369" key="GridCell.Tab.0.bottom" timestamp="1601802201589">
@@ -182,24 +204,5 @@
       <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state width="1865" height="369" key="GridCell.Tab.4.right/0.0.1920.1050@0.0.1920.1050" timestamp="1601802201457" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/InstaDownloader/ViewModels/ContentViewModel.cs</url>
-          <line>91</line>
-          <properties documentPath="C:\Documents\Git\InstaDownloader\InstaDownloader\ViewModels\ContentViewModel.cs" initialLine="91">
-            <startOffsets>
-              <option value="2202" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2223" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
