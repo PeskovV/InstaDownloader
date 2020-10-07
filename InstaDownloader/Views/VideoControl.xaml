@@ -6,7 +6,9 @@
              xmlns:local="clr-namespace:InstaDownloader.Views"
              xmlns:converters="clr-namespace:InstaDownloader.Converters"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             MaxHeight="400"
+             MaxWidth="400">
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolVisibilityConverter" />
         <converters:OpositeBoolToVisibilityConverter x:Key="OpositeBoolVisibilityConverter" />
@@ -18,10 +20,10 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <MediaElement x:Name="Video" 
                           Visibility="{Binding Path=ContentLoaded, Mode=OneWay, 
                       Converter={StaticResource ResourceKey=BoolVisibilityConverter}}"
@@ -29,9 +31,9 @@
                           VerticalAlignment="Top" HorizontalAlignment="Left"
                           LoadedBehavior="Manual"/>
 
-            <StackPanel Orientation="Vertical"
-                        Grid.Column="1"
-                        Margin="5,0,0,0">
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="1"
+                        Margin="5">
                 <Button Content="Play" Click="Play_OnClick" Margin="0,0,0,3"/>
                 <Button Content="Pause" Click="Pause_OnClick" Margin="0,0,0,3"/>
                 <Button Content="Stop" Click="Stop_OnClick" Margin="0,0,0,3"/>

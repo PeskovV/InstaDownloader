@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -12,14 +13,14 @@ using InstaDownloader.Utils;
 
 namespace InstaDownloader.ViewModels
 {
-    public abstract class ContentViewModel : BaseViewModel
+    public class ContentViewModel : BaseViewModel
     {
-        private MediaType _mediaType;
-        private byte[] _data;
-        private string _url;
         private string _author;
         private string _description;
         private string _location;
+        private MediaType _mediaType;
+        private byte[] _data;
+        private string _url;
         private bool _isVideo;
 
         protected ContentViewModel()
@@ -37,7 +38,6 @@ namespace InstaDownloader.ViewModels
                 OnPropertyChanged(nameof(CopyTextCommand));
             }
         }
-
         public MediaType MediaType
         {
             get => _mediaType;
@@ -46,6 +46,42 @@ namespace InstaDownloader.ViewModels
                 _mediaType = value;
                 OnPropertyChanged(nameof(MediaType));
             }
+        }
+
+        public string Url
+        {
+            get => _url;
+            set
+            {
+                _url = value.Replace("https", "http");
+                OnPropertyChanged(nameof(Url));
+            }
+        }
+
+        public bool IsVideo
+        {
+            get => _isVideo;
+            set
+            {
+                _isVideo = value;
+                OnPropertyChanged(nameof(IsVideo));
+            }
+        }
+
+        public byte[] Data
+        {
+            get => _data;
+            set
+            {
+                _data = value;
+                OnPropertyChanged(nameof(Data));
+            }
+        }
+
+        public virtual async Task DownloadBytes(HttpClient client)
+        {
+            var data = await client.GetByteArrayAsync(new Uri(Url));
+            Data = data;
         }
 
         public string Description
@@ -83,6 +119,8 @@ namespace InstaDownloader.ViewModels
 
         public virtual void AddAuthor() {}
 
+        public virtual void SaveWithoutDialog(string pathFolder, int index) {}
+
         public virtual void Save() {}
 
         public virtual void CopyContent() { }
@@ -91,42 +129,6 @@ namespace InstaDownloader.ViewModels
         {
             if(obj is string str)
                 Clipboard.SetText(str);
-        }
-
-        public string Url
-        {
-            get => _url;
-            set
-            {
-                _url = value.Replace("https", "http");
-                OnPropertyChanged(nameof(Url));
-            }
-        }
-
-        public bool IsVideo
-        {
-            get => _isVideo;
-            set
-            {
-                _isVideo = value;
-                OnPropertyChanged(nameof(IsVideo));
-            }
-        }
-
-        public byte[] Data
-        {
-            get => _data;
-            set
-            {
-                _data = value;
-                OnPropertyChanged(nameof(Data));
-            }
-        }
-
-        public virtual async Task DownloadBytes(HttpClient client)
-        {
-            var data = await client.GetByteArrayAsync(new Uri(Url));
-            Data = data;
         }
 
         public virtual void AddDescription(string description, bool clearAll = false)

@@ -245,7 +245,7 @@ namespace InstaDownloader.Models
     public partial class FluffyNode
     {
         [JsonProperty("__typename")]
-        public string Typename { get; set; }
+        public MediaType Typename { get; set; }
 
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -285,6 +285,9 @@ namespace InstaDownloader.Models
 
         [JsonProperty("is_video")]
         public bool? IsVideo { get; set; }
+
+        [JsonProperty("video_url")]
+        public string VideoUrl { get; set; }
 
         [JsonProperty("tracking_token")]
         public string TrackingToken { get; set; }
