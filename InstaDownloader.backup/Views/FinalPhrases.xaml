@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="InstaDownloader.Views.FinalPhrases"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:InstaDownloader.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <GroupBox Header="Конечные фразы"
+                  Padding="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="PhrasesTextBox"
+                             HorizontalAlignment="Stretch"/>
+
+                    <Button Content="Add"
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            Click="AddPhrases_OnClick"/>
+                </Grid>
+
+                <StackPanel Grid.Row="1"
+                            Orientation="Vertical"
+                            Margin="0,11,0,0"
+                            x:Name="RadioButtonPanel">
+                    <RadioButton Content="Другие пейзажи наших подписчиков можно увидеть по тегу #natgeoru"
+                                 GroupName="Pharses"
+                                 Click="FinalPhrase_OnClick"/>
+                    <RadioButton Content="Больше фотографий наших подписчиков можно найти по тегу #natgeoru"
+                                 GroupName="Pharses"
+                                 Click="FinalPhrase_OnClick"/>
+                    <RadioButton Content="Помечайте свои ролики тегом #VideoNGR, чтобы мы их опубликовали"
+                                 GroupName="Pharses"
+                                 Click="FinalPhrase_OnClick"/>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

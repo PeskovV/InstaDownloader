@@ -1,12 +1,15 @@
-﻿namespace InstaDownloader.ViewModels
-{
-    using System;
-    using System.IO;
-    using System.Linq;
-    using Models;
-    using Utils;
-    using Microsoft.Win32;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using InstaDownloader.Models;
+using InstaDownloader.Utils;
+using Microsoft.Win32;
 
+namespace InstaDownloader.ViewModels
+{
     public class VideoViewModel : ContentViewModel
     {
         public override void AddAuthor()

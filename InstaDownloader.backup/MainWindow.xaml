@@ -7,7 +7,6 @@
         xmlns:instaDownloader="clr-namespace:InstaDownloader"
         xmlns:viewModels="clr-namespace:InstaDownloader.ViewModels"
         xmlns:views="clr-namespace:InstaDownloader.Views"
-        xmlns:utils="clr-namespace:InstaDownloader.Utils"
         mc:Ignorable="d"
         Title="InstaDownloader"
         Icon="Images/icon_mini.png"
@@ -40,12 +39,15 @@
                     <RowDefinition Height="Auto" MinHeight="35"/>
                 </Grid.RowDefinitions>
                 <TextBox MinHeight="31" Grid.Row="0"
-                         x:Name="ContentPathElement"
                          TabIndex="0"
                          Margin="5,0"
                          VerticalAlignment="Center"
                          VerticalContentAlignment="Center"
-                         Text="{Binding ContentPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                         Text="{Binding Path=ContentPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         >
+                    <TextBox.InputBindings>
+                        <KeyBinding Command="{Binding DownloadCommand}" Key="Enter" />
+                    </TextBox.InputBindings>
                 </TextBox>
                 <Grid Grid.Row="1"
                       Margin="5, 11, 0, 0">
@@ -66,22 +68,18 @@
 
                     <Button Grid.Column="0"
                             Grid.Row="2"
-                            Command="{Binding DownloadCommand}"
-                            CommandParameter="{Binding ContentPath, Mode=TwoWay}"
-                            utils:RelayCommandExtensions.IsCommandUpdateEnabled="{Binding True}"
+                            Command="{Binding Path=DownloadCommand}"
                             VerticalAlignment="Center"
                             Margin="0,0,5,0"
                             Content="Download"
                             Cursor="Hand"
                             MinWidth="61"
-                            MinHeight="21">
-                    </Button>
+                            MinHeight="21"/>
 
                     <Button Grid.Column="1"
                             Grid.Row="2"
                             Command="{Binding CopyCommand}"
-                            CommandParameter="{Binding Contents}"
-                            utils:RelayCommandExtensions.IsCommandUpdateEnabled="{Binding True}"
+                            CommandTarget="{Binding ElementName=Window}"
                             VerticalAlignment="Center"
                             Margin="0,0,5,0"
                             Content="Copy"
@@ -92,8 +90,7 @@
                     <Button Grid.Column="2"
                             Grid.Row="2"
                             Command="{Binding SaveCommand}"
-                            CommandParameter="{Binding Contents}"
-                            utils:RelayCommandExtensions.IsCommandUpdateEnabled="{Binding True}"
+                            CommandTarget="{Binding ElementName=Window}"
                             VerticalAlignment="Center"
                             Margin="0,0,5,0"
                             Content="Save"
@@ -114,7 +111,7 @@
         <StatusBar Grid.Row="3">
             <StatusBarItem HorizontalAlignment="Right" Visibility="{Binding Path=Busy, Mode=OneWay, Converter={StaticResource ResourceKey= BoolVisibilityConverter}}">
                 <Label>
-                    Operation executing ...
+                    Downloading media ...
                 </Label>
             </StatusBarItem>
         </StatusBar>
