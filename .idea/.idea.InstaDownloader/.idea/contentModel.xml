@@ -15,6 +15,13 @@
           <e p="MediaTypeVisibilityConverter.cs" t="Include" />
           <e p="OpositeBoolToVisibilityConverter.cs" t="Include" />
         </e>
+        <e p="Factory" t="Include">
+          <e p="ContentFactory.cs" t="Include" />
+          <e p="IContentCreator.cs" t="Include" />
+          <e p="ImageCreator.cs" t="Include" />
+          <e p="SidecarCreator.cs" t="Include" />
+          <e p="VideoCreator.cs" t="Include" />
+        </e>
         <e p="Images" t="Include">
           <e p="932e4d9af891.png" t="Include" />
           <e p="icon_mini.png" t="Include" />
@@ -26,6 +33,7 @@
         <e p="Models" t="Include">
           <e p="ContentModel.cs" t="Include" />
           <e p="InstaMedia.cs" t="Include" />
+          <e p="SaveInfo.cs" t="Include" />
         </e>
         <e p="obj" t="ExcludeRecursive">
           <e p="Debug" t="Include">
@@ -51,6 +59,8 @@
           <e p="Settings.settings" t="Include" />
         </e>
         <e p="Utils" t="Include">
+          <e p="EnumerableExtensions.cs" t="Include" />
+          <e p="FileExtension.cs" t="Include" />
           <e p="MediaType.cs" t="Include" />
         </e>
         <e p="ViewModels" t="Include">
