@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
-
-namespace InstaDownloader.ViewModels
+﻿namespace InstaDownloader.ViewModels
 {
-    using Microsoft.Toolkit.Mvvm.ComponentModel;
     using Microsoft.Toolkit.Mvvm.Input;
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using System.Windows.Input;
     using System.Windows.Forms;
     using Factory;
     using Models;
     using Utils;
 
-    public class InstaDownloaderViewModel : ObservableObject
+    public class InstaDownloaderViewModel : BaseViewModel
     {
         private ObservableCollection<ContentViewModel> _contents;
         //private ContentViewModel _content;
@@ -29,17 +26,15 @@ namespace InstaDownloader.ViewModels
         public InstaDownloaderViewModel()
         {
             DownloadCommand = new AsyncRelayCommand<string>(DownloadCommandExecute, DownloadCommandCanExecute);
-            OnPropertyChanged(nameof(DownloadCommand));
             SaveCommand = new RelayCommand<IList<ContentViewModel>>(SaveCommandExecute, SaveCommandCanExecute);
             CopyCommand = new RelayCommand<IList<ContentViewModel>>(CopyCommandExecute, CopyCommandCanExecute);
             DefaultCopy = true;
             _client = new HttpClient();
         }
 
-        public IAsyncRelayCommand<string> DownloadCommand { get; private set; }
-        public bool True => true;
-        public IRelayCommand<IList<ContentViewModel>> CopyCommand { get; private set; }
-        public IRelayCommand<IList<ContentViewModel>> SaveCommand { get; private set; }
+        public IAsyncRelayCommand<string> DownloadCommand { get; }
+        public IRelayCommand<IList<ContentViewModel>> CopyCommand { get; }
+        public IRelayCommand<IList<ContentViewModel>> SaveCommand { get; }
 
         public string FinalPhrase
         {
@@ -60,13 +55,7 @@ namespace InstaDownloader.ViewModels
         public ObservableCollection<ContentViewModel> Contents
         {
             get => _contents;
-            set
-            {
-                SetProperty(ref _contents, value);
-                OnPropertyChanged(nameof(Content));
-                //SaveCommand.NotifyCanExecuteChanged();
-                //CopyCommand.NotifyCanExecuteChanged();
-            }
+            set => SetProperty(ref _contents, value);
         }
 
         public ContentViewModel Content => Contents?.FirstOrDefault();
@@ -74,11 +63,7 @@ namespace InstaDownloader.ViewModels
         public string ContentPath
         {
             get => _contentPath;
-            set
-            {
-                SetProperty(ref _contentPath, value);
-                //DownloadCommand.NotifyCanExecuteChanged();
-            }
+            set => SetProperty(ref _contentPath, value);
         }
 
         public bool ContentLoaded
@@ -131,7 +116,7 @@ namespace InstaDownloader.ViewModels
                 MediaType.GraphVideo => new ObservableCollection<ContentViewModel>(ContentFactory.Create(contentModel)),
                 _ => throw new ArgumentOutOfRangeException()
             };
-            OnPropertyChanged(nameof(Contents));
+            OnPropertyChanged(nameof(Content));
         }
 
         private async Task<ContentModel> GetModel(string url)

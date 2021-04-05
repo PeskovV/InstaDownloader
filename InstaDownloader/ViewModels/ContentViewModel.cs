@@ -4,12 +4,10 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using System.Windows;
-    using System.Windows.Input;
     using Utils;
-    using Microsoft.Toolkit.Mvvm.ComponentModel;
     using Microsoft.Toolkit.Mvvm.Input;
 
-    public class ContentViewModel : ObservableObject
+    public class ContentViewModel : BaseViewModel
     {
         private string _author;
         private string _description;
@@ -19,17 +17,19 @@
         private string _url;
         private bool _isVideo;
 
+        private IRelayCommand _copyTextCommand;
+
         protected ContentViewModel()
         {
             CopyTextCommand = new RelayCommand<string>(CopyText);
         }
 
-        private ICommand _copyTextCommand;
-        public ICommand CopyTextCommand
+        public IRelayCommand CopyTextCommand
         {
             get => _copyTextCommand;
             set => SetProperty(ref _copyTextCommand, value);
         }
+
         public MediaType MediaType
         {
             get => _mediaType;
@@ -63,7 +63,7 @@
         public string Description
         {
             get => _description;
-            set => SetProperty(ref _description, value);
+            set => SetProperty(ref _description, value, nameof(Description));
         }
 
         public string Author
@@ -71,7 +71,7 @@
             get => _author;
             set
             {
-                SetProperty(ref _author, value);
+                SetProperty(ref _author, value, nameof(Author));
                 OnPropertyChanged(nameof(ModifiedAuthor));
             }
         }
