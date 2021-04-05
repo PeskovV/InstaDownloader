@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using InstaDownloader.Commands;
-using InstaDownloader.Factory;
-using InstaDownloader.Models;
-using InstaDownloader.Utils;
-using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
-
-namespace InstaDownloader.ViewModels
+﻿namespace InstaDownloader.ViewModels
 {
+    using Microsoft.Toolkit.Mvvm.Input;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using Factory;
+    using Models;
+    using Utils;
+
     public class InstaDownloaderViewModel : BaseViewModel
     {
         private ObservableCollection<ContentViewModel> _contents;
@@ -31,24 +25,23 @@ namespace InstaDownloader.ViewModels
 
         public InstaDownloaderViewModel()
         {
-            DownloadCommand = new RelayCommand(DownloadCommandExecute, DownloadCommandCanExecute);
-            SaveCommand = new RelayCommand(SaveCommandExecute, SaveCommandCanExecute);
-            CopyCommand = new RelayCommand(CopyCommandExecute, CopyCommandCanExecute);
+            DownloadCommand = new AsyncRelayCommand<string>(DownloadCommandExecute, DownloadCommandCanExecute);
+            SaveCommand = new RelayCommand<IList<ContentViewModel>>(SaveCommandExecute, SaveCommandCanExecute);
+            CopyCommand = new RelayCommand<IList<ContentViewModel>>(CopyCommandExecute, CopyCommandCanExecute);
             DefaultCopy = true;
             _client = new HttpClient();
         }
 
-        public ICommand DownloadCommand { get; set; }
-        public ICommand CopyCommand { get; set; }
-        public ICommand SaveCommand { get; set; }
+        public IAsyncRelayCommand<string> DownloadCommand { get; }
+        public IRelayCommand<IList<ContentViewModel>> CopyCommand { get; }
+        public IRelayCommand<IList<ContentViewModel>> SaveCommand { get; }
 
         public string FinalPhrase
         {
             get => _finalPhrase;
             set
             {
-                _finalPhrase = value;
-                OnPropertyChanged(nameof(FinalPhrase));
+                SetProperty(ref _finalPhrase, value);
                 Contents?.FirstOrDefault()?.AddDescription(_finalPhrase);
             }
         }
@@ -56,32 +49,13 @@ namespace InstaDownloader.ViewModels
         public bool DefaultCopy
         {
             get => _defaultCopy;
-            set
-            {
-                _defaultCopy = value;
-                OnPropertyChanged(nameof(DefaultCopy));
-            }
+            set => SetProperty(ref _defaultCopy, value);
         }
 
-        //public ContentViewModel Content
-        //{
-        //    get => _content;
-        //    set
-        //    {
-        //        _content = value;
-        //        OnPropertyChanged(nameof(Content));
-        //    }
-        //}
-        
         public ObservableCollection<ContentViewModel> Contents
         {
             get => _contents;
-            set
-            {
-                _contents = value;
-                OnPropertyChanged(nameof(Contents));
-                OnPropertyChanged(nameof(Content));
-            }
+            set => SetProperty(ref _contents, value);
         }
 
         public ContentViewModel Content => Contents?.FirstOrDefault();
@@ -89,34 +63,22 @@ namespace InstaDownloader.ViewModels
         public string ContentPath
         {
             get => _contentPath;
-            set
-            {
-                _contentPath = value;
-                OnPropertyChanged(nameof(ContentPath));
-            }
+            set => SetProperty(ref _contentPath, value);
         }
 
         public bool ContentLoaded
         {
-            get { return _contentLoaded; }
-            set
-            {
-                _contentLoaded = value;
-                OnPropertyChanged(nameof(ContentLoaded));
-            }
+            get => _contentLoaded;
+            set => SetProperty(ref _contentLoaded, value);
         }
 
         public bool Busy
         {
-            get { return _busy; }
-            set
-            {
-                _busy = value;
-                OnPropertyChanged(nameof(Busy));
-            }
+            get => _busy;
+            set => SetProperty(ref _busy, value);
         }
 
-        private async void DownloadCommandExecute(object obj)
+        private async Task DownloadCommandExecute(string contentPath)
         {
             ContentLoaded = false;
             Busy = true;
@@ -125,9 +87,11 @@ namespace InstaDownloader.ViewModels
             ContentLoaded = true;
             AddDescription();
             if(Contents.FirstOrDefault(x => x.MediaType == MediaType.GraphImage) != null && DefaultCopy)
-                CopyCommandExecute(null);
+                CopyCommandExecute(Contents);
             Busy = false;
         }
+
+        private bool DownloadCommandCanExecute(string contentPath) => !string.IsNullOrWhiteSpace(ContentPath);
 
         private async Task DownloadBytes()
         {
@@ -136,8 +100,6 @@ namespace InstaDownloader.ViewModels
         }
 
         private void AddDescription() => Contents.ToList().ForEach(x => x.AddDescription(FinalPhrase));
-        
-        private bool DownloadCommandCanExecute(object obj) => !string.IsNullOrWhiteSpace(ContentPath);
 
         private async Task GetReferences(string url)
         {
@@ -146,21 +108,15 @@ namespace InstaDownloader.ViewModels
             if (string.IsNullOrWhiteSpace(url))
                 return;
             var contentModel = await GetModel(url);
-            switch (contentModel.MediaType)
+            Contents = contentModel.MediaType switch
             {
-                case MediaType.GraphSidecar:
-                    Contents = new ObservableCollection<ContentViewModel>(ContentFactory.Create(contentModel));
-                    break;
-                case MediaType.GraphImage:
-                    Contents = new ObservableCollection<ContentViewModel>(ContentFactory.Create(contentModel));
-                    break;
-                case MediaType.GraphVideo:
-                    Contents = new ObservableCollection<ContentViewModel>(ContentFactory.Create(contentModel));
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            OnPropertyChanged(nameof(Contents));
+                MediaType.GraphSidecar => new ObservableCollection<ContentViewModel>(
+                    ContentFactory.Create(contentModel)),
+                MediaType.GraphImage => new ObservableCollection<ContentViewModel>(ContentFactory.Create(contentModel)),
+                MediaType.GraphVideo => new ObservableCollection<ContentViewModel>(ContentFactory.Create(contentModel)),
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            OnPropertyChanged(nameof(Content));
         }
 
         private async Task<ContentModel> GetModel(string url)
@@ -178,7 +134,7 @@ namespace InstaDownloader.ViewModels
             }
         }
 
-        private void SaveCommandExecute(object obj)
+        private void SaveCommandExecute(IList<ContentViewModel> contents)
         {
             Busy = true;
             if(Contents?.Count == 1)
@@ -194,20 +150,21 @@ namespace InstaDownloader.ViewModels
 
         private void SaveAllContent()
         {
-            var dlg = new CommonOpenFileDialog {Title = "Save all content", IsFolderPicker = true};
-            if (dlg.ShowDialog() != CommonFileDialogResult.Ok) 
+            var dlg = new FolderBrowserDialog();
+            if (dlg.ShowDialog() != DialogResult.OK) 
                 return;
-            var folder = dlg.FileName;
+            var folder = dlg.SelectedPath;
             foreach (var content in Contents)
                 content.SaveWithoutDialog(folder, Contents.IndexOf(content));
         }
 
-        private bool SaveCommandCanExecute(object obj) => Contents?.Any(x => x.Data != null) ?? false;
+        private bool SaveCommandCanExecute(IList<ContentViewModel> contents) => contents?.Any(x => x.Data != null) ?? false;
 
-        private void CopyCommandExecute(object element) => Contents?.FirstOrDefault()?.CopyContent();
+        private void CopyCommandExecute(IList<ContentViewModel> contents) => contents?.FirstOrDefault()?.CopyContent();
 
-        private bool CopyCommandCanExecute(object obj) => Contents?.Count == 1 &&
-                                                          Contents?.FirstOrDefault()?.Data != null && 
-                                                          Contents?.FirstOrDefault()?.MediaType == MediaType.GraphImage;
+        private bool CopyCommandCanExecute(IList<ContentViewModel> contents) => 
+            contents?.Count == 1 && 
+            contents.FirstOrDefault()?.Data != null &&
+            contents.FirstOrDefault()?.MediaType == MediaType.GraphImage;
     }
 }

@@ -1,12 +1,17 @@
-﻿namespace InstaDownloader.ViewModels
-{
-    using System;
-    using System.IO;
-    using System.Windows;
-    using System.Windows.Media.Imaging;
-    using Utils;
-    using Microsoft.Win32;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media.Imaging;
+using InstaDownloader.Models;
+using InstaDownloader.Utils;
+using Microsoft.Win32;
 
+namespace InstaDownloader.ViewModels
+{
     public class ImageViewModel : ContentViewModel
     {
         private BitmapImage LoadImage(byte[] imageData)

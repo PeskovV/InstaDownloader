@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using InstaDownloader.Models;
 using InstaDownloader.Utils;
@@ -11,29 +10,32 @@ using InstaDownloader.ViewModels;
 
 namespace InstaDownloader.Factory
 {
-    public class VideoCreator : IContentCreator
+    public class ImageCreator : IContentCreator
     {
         public IEnumerable<ContentViewModel> Create(ContentModel model)
         {
-            return CreateVideoViewModel(model).ToSingleList();
+            return CreateImageViewModel(model).ToSingleList();
         }
 
-        private VideoViewModel CreateVideoViewModel(ContentModel model)
+        private ImageViewModel CreateImageViewModel(ContentModel model)
         {
-            return new VideoViewModel
+            return new ImageViewModel
             {
-                IsVideo = true,
-                MediaType = MediaType.GraphVideo,
-                Url = GetVideoReference(model),
+                IsVideo = false,
+                MediaType = MediaType.GraphImage,
+                Url = GetImageReference(model.DisplayResources),
                 Author = model.Owner.Username,
                 Description = model.EdgeMediaToCaption.Edges.FirstOrDefault()?.Node.Text,
                 Location = model.Location?.Name
             };
         }
 
-        private string GetVideoReference(ContentModel model)
+        private  string GetImageReference(IReadOnlyCollection<DisplayResource> displayResources)
         {
-            return !string.IsNullOrEmpty(model.VideoUrl) ? model.VideoUrl : string.Empty;
+            if (displayResources.LastOrDefault() != null)
+                return displayResources.Last().Src.ToString();
+
+            return string.Empty;
         }
     }
 }

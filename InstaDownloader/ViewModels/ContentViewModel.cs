@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using InstaDownloader.Commands;
-using InstaDownloader.Models;
-using InstaDownloader.Utils;
-
-namespace InstaDownloader.ViewModels
+﻿namespace InstaDownloader.ViewModels
 {
+    using System;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using Utils;
+    using Microsoft.Toolkit.Mvvm.Input;
+
     public class ContentViewModel : BaseViewModel
     {
         private string _author;
@@ -23,59 +17,41 @@ namespace InstaDownloader.ViewModels
         private string _url;
         private bool _isVideo;
 
+        private IRelayCommand _copyTextCommand;
+
         protected ContentViewModel()
         {
-            CopyTextCommand = new RelayCommand(CopyText);
+            CopyTextCommand = new RelayCommand<string>(CopyText);
         }
 
-        private ICommand _copyTextCommand;
-        public ICommand CopyTextCommand
+        public IRelayCommand CopyTextCommand
         {
             get => _copyTextCommand;
-            set
-            {
-                _copyTextCommand = value;
-                OnPropertyChanged(nameof(CopyTextCommand));
-            }
+            set => SetProperty(ref _copyTextCommand, value);
         }
+
         public MediaType MediaType
         {
             get => _mediaType;
-            set
-            {
-                _mediaType = value;
-                OnPropertyChanged(nameof(MediaType));
-            }
+            set => SetProperty(ref _mediaType, value);
         }
 
         public string Url
         {
             get => _url;
-            set
-            {
-                _url = value.Replace("https", "http");
-                OnPropertyChanged(nameof(Url));
-            }
+            set => SetProperty(ref _url, value.Replace("https", "http"));
         }
 
         public bool IsVideo
         {
             get => _isVideo;
-            set
-            {
-                _isVideo = value;
-                OnPropertyChanged(nameof(IsVideo));
-            }
+            set => SetProperty(ref _isVideo, value);
         }
 
         public byte[] Data
         {
             get => _data;
-            set
-            {
-                _data = value;
-                OnPropertyChanged(nameof(Data));
-            }
+            set => SetProperty(ref _data, value);
         }
 
         public virtual async Task DownloadBytes(HttpClient client)
@@ -87,11 +63,7 @@ namespace InstaDownloader.ViewModels
         public string Description
         {
             get => _description;
-            set
-            {
-                _description = value;
-                OnPropertyChanged(nameof(Description));
-            }
+            set => SetProperty(ref _description, value, nameof(Description));
         }
 
         public string Author
@@ -99,8 +71,7 @@ namespace InstaDownloader.ViewModels
             get => _author;
             set
             {
-                _author = value;
-                OnPropertyChanged(nameof(Author));
+                SetProperty(ref _author, value, nameof(Author));
                 OnPropertyChanged(nameof(ModifiedAuthor));
             }
         }
@@ -110,11 +81,7 @@ namespace InstaDownloader.ViewModels
         public string Location
         {
             get => _location;
-            set
-            {
-                _location = value;
-                OnPropertyChanged(nameof(Location));
-            }
+            set => SetProperty(ref _location, value);
         }
 
         public virtual void AddAuthor() {}
@@ -125,19 +92,17 @@ namespace InstaDownloader.ViewModels
 
         public virtual void CopyContent() { }
 
-        public virtual void CopyText(object obj)
+        public virtual void CopyText(string str)
         {
-            if(obj is string str)
-                Clipboard.SetText(str);
+            Clipboard.SetText(str);
         }
 
         public virtual void AddDescription(string description, bool clearAll = false)
         {
-            if (!string.IsNullOrWhiteSpace(Description) && !string.IsNullOrWhiteSpace(description))
-            {
-                Description += Environment.NewLine;
-                Description = string.Concat(Description, description);
-            }
+            if (string.IsNullOrWhiteSpace(Description) || string.IsNullOrWhiteSpace(description))
+                return;
+            Description += Environment.NewLine;
+            Description = string.Concat(Description, description);
         }
     }
 }
