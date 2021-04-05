@@ -15,7 +15,7 @@
         Height="581"
         MinHeight="581"
         Width="681"
-        MinWidth="681" 
+        MinWidth="681"
         d:DataContext="{d:DesignInstance viewModels:InstaDownloaderViewModel}">
     <Window.Resources>
         <ResourceDictionary>
@@ -24,7 +24,7 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MaxHeight="101"/>
+            <RowDefinition Height="Auto" MaxHeight="101" />
             <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
@@ -32,37 +32,41 @@
 
         <Grid Grid.Row="2"
               Margin="5">
-            <Grid>
+            <Grid Margin="5,0,5,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto" MinHeight="35"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" MinHeight="35" />
                 </Grid.RowDefinitions>
                 <TextBox MinHeight="31" Grid.Row="0"
                          x:Name="ContentPathElement"
                          TabIndex="0"
-                         Margin="5,0"
                          VerticalAlignment="Center"
                          VerticalContentAlignment="Center"
-                         Text="{Binding ContentPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                </TextBox>
-                <Grid Grid.Row="1"
-                      Margin="5, 11, 0, 0">
+                         Text="{Binding ContentPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="1"
+                           Text="Incorrect URL"
+                           FontSize="10"
+                           Foreground="Red"
+                           Visibility="{Binding IsCorrectUrl, Converter={StaticResource Boolean2VisibilityReConverter}}"/>
+                <Grid Grid.Row="2"
+                      Margin="0, 11, 0, 0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" MinWidth="45"/>
-                        <ColumnDefinition Width="Auto" MinWidth="51"/>
-                        <ColumnDefinition Width="Auto" MinWidth="45"/>
+                        <ColumnDefinition Width="Auto" MinWidth="45" />
+                        <ColumnDefinition Width="Auto" MinWidth="51" />
+                        <ColumnDefinition Width="Auto" MinWidth="45" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="5"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <CheckBox Grid.Row="0"
                               Grid.ColumnSpan="3"
                               Content="Копировать при загруке"
-                              IsChecked="{Binding DefaultCopy, Mode=TwoWay}"/>
+                              IsChecked="{Binding DefaultCopy, Mode=TwoWay}" />
 
                     <Button Grid.Column="0"
                             Grid.Row="2"
@@ -70,12 +74,10 @@
                             CommandParameter="{Binding ContentPath, Mode=TwoWay}"
                             utils:RelayCommandExtensions.IsCommandUpdateEnabled="{Binding True}"
                             VerticalAlignment="Center"
-                            Margin="0,0,5,0"
                             Content="Download"
                             Cursor="Hand"
                             MinWidth="61"
-                            MinHeight="21">
-                    </Button>
+                            MinHeight="21" />
 
                     <Button Grid.Column="1"
                             Grid.Row="2"
@@ -83,11 +85,10 @@
                             CommandParameter="{Binding Contents}"
                             utils:RelayCommandExtensions.IsCommandUpdateEnabled="{Binding True}"
                             VerticalAlignment="Center"
-                            Margin="0,0,5,0"
                             Content="Copy"
-                            Cursor="Hand" 
+                            Cursor="Hand"
                             MinWidth="61"
-                            MinHeight="21"/>
+                            MinHeight="21" />
 
                     <Button Grid.Column="2"
                             Grid.Row="2"
@@ -95,24 +96,24 @@
                             CommandParameter="{Binding Contents}"
                             utils:RelayCommandExtensions.IsCommandUpdateEnabled="{Binding True}"
                             VerticalAlignment="Center"
-                            Margin="0,0,5,0"
                             Content="Save"
                             Cursor="Hand"
                             MinWidth="61"
-                            MinHeight="21"/>
+                            MinHeight="21" />
                 </Grid>
 
-                <views:ContentControl Grid.Row="2"
-                                Margin="5, 11, 0, 0"
-                                DataContext="{Binding}"/>
+                <views:ContentControl Grid.Row="3"
+                                      Margin="0, 11, 0, 0"
+                                      DataContext="{Binding}" />
 
-                <views:FinalPhrases Grid.Row="3"
-                                    Margin="5, 11, 0, 11"
-                                    DataContext="{Binding}"/>
+                <views:FinalPhrases Grid.Row="4"
+                                    Margin="0, 11, 0, 11"
+                                    DataContext="{Binding}" />
             </Grid>
         </Grid>
         <StatusBar Grid.Row="3">
-            <StatusBarItem HorizontalAlignment="Right" Visibility="{Binding Path=Busy, Mode=OneWay, Converter={StaticResource ResourceKey= BoolVisibilityConverter}}">
+            <StatusBarItem HorizontalAlignment="Right"
+                           Visibility="{Binding Path=Busy, Mode=OneWay, Converter={StaticResource ResourceKey= BoolVisibilityConverter}}">
                 <Label>
                     Operation executing ...
                 </Label>

@@ -63,7 +63,11 @@
         public string ContentPath
         {
             get => _contentPath;
-            set => SetProperty(ref _contentPath, value);
+            set
+            {
+                SetProperty(ref _contentPath, value);
+                OnPropertyChanged(nameof(IsCorrectUrl));
+            }
         }
 
         public bool ContentLoaded
@@ -78,11 +82,25 @@
             set => SetProperty(ref _busy, value);
         }
 
+        public bool IsCorrectUrl
+        {
+            get
+            {
+                if (ContentPath == null || ContentPath.Length < 40)
+                    return false;
+                var domen = ContentPath?.Substring(0, 28);
+                var link = ContentPath?.Substring(28, 11);
+                return domen.Equals("https://www.instagram.com/p/") && 
+                       link.Length == 11 && 
+                       ContentPath.EndsWith('/');
+            }
+        }
+
         private async Task DownloadCommandExecute(string contentPath)
         {
             ContentLoaded = false;
             Busy = true;
-            await GetReferences(ContentPath);
+            await GetReferences(contentPath);
             await DownloadBytes();
             ContentLoaded = true;
             AddDescription();
@@ -91,7 +109,7 @@
             Busy = false;
         }
 
-        private bool DownloadCommandCanExecute(string contentPath) => !string.IsNullOrWhiteSpace(ContentPath);
+        private bool DownloadCommandCanExecute(string contentPath) => !string.IsNullOrWhiteSpace(contentPath) && IsCorrectUrl;
 
         private async Task DownloadBytes()
         {
