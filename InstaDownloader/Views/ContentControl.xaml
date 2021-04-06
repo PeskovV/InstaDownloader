@@ -76,11 +76,20 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding Content.ModifiedAuthor, Mode=OneWay}"
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                           Foreground="DarkGray"
+                           Text="Username:"/>
+
+                <TextBox Grid.Row="1" Text="{Binding Content.ModifiedAuthor, Mode=OneWay}"
                          IsReadOnly="True"
                          HorizontalAlignment="Stretch"/>
 
                 <Button Content="Copy"
+                        Grid.Row="1"
                         Grid.Column="1"
                         Margin="5,0,0,0"
                         Command="{Binding Content.CopyTextCommand}"
@@ -93,25 +102,43 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Text="{Binding Content.Location, Mode=OneWay}"
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                           Foreground="DarkGray"
+                           Text="Location:"/>
+                <TextBox Grid.Row="1" Text="{Binding Content.Location, Mode=OneWay}"
                          IsReadOnly="True"
                          HorizontalAlignment="Stretch"/>
 
                 <Button Content="Copy"
                         Grid.Column="1"
+                        Grid.Row="1"
                         Margin="5,0,0,0"
                         Command="{Binding Content.CopyTextCommand}"
                         CommandParameter="{Binding Content.Location}"/>
             </Grid>
 
-            <TextBox MinWidth="15"
-                     Margin="0,3,0,0"
-                     Grid.Row="2"
-                     TextWrapping="Wrap"
-                     Text="{Binding Content.Description, Mode=OneWay}"
-                     AcceptsReturn="True"
-                     IsEnabled="{Binding ContentLoaded}"
-                     VerticalScrollBarVisibility="Auto"/>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Foreground="DarkGray"
+                           Text="Description:"/>
+
+                <TextBox MinWidth="15"
+                         Margin="0,3,0,0"
+                         Grid.Row="1"
+                         TextWrapping="Wrap"
+                         Text="{Binding Content.Description, Mode=OneWay}"
+                         AcceptsReturn="True"
+                         IsEnabled="{Binding ContentLoaded}"
+                         VerticalScrollBarVisibility="Auto"/>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>
