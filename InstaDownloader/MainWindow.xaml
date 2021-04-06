@@ -39,6 +39,9 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+
+                </Grid.ColumnDefinitions>
                 <TextBox MinHeight="31" Grid.Row="0"
                          x:Name="ContentPathElement"
                          TabIndex="0"
@@ -64,7 +67,7 @@
                     </Grid.RowDefinitions>
                     <CheckBox Grid.Row="0"
                               Grid.ColumnSpan="3"
-                              Content="Копировать при загруке"
+                              Content="Copy to clipboard after loading"
                               IsChecked="{Binding DefaultCopy, Mode=TwoWay}" />
 
                     <Button Grid.Column="0"
@@ -80,6 +83,7 @@
 
                     <Button Grid.Column="1"
                             Grid.Row="2"
+                            Margin="5,0,0,0"
                             Command="{Binding CopyCommand}"
                             CommandParameter="{Binding Contents}"
                             utils:RelayCommandExtensions.IsCommandUpdateEnabled="{Binding True}"
@@ -91,6 +95,7 @@
 
                     <Button Grid.Column="2"
                             Grid.Row="2"
+                            Margin="5,0,0,0"
                             Command="{Binding SaveCommand}"
                             CommandParameter="{Binding Contents}"
                             utils:RelayCommandExtensions.IsCommandUpdateEnabled="{Binding True}"

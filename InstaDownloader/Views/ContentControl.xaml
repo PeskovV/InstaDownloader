@@ -28,12 +28,13 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*" MinWidth="251"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" 
                 BorderThickness="1"
                 BorderBrush="LightGray"
+                Margin="0,0,3,0"
                 MaxWidth="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=ActualWidth}">
             <ScrollViewer>
                 <ItemsControl ItemsSource="{Binding Contents}" Margin="20">
@@ -58,8 +59,13 @@
             </ScrollViewer>
         </Border>
 
+        <GridSplitter Grid.Column="1"
+                      Width="5"
+                      VerticalAlignment="Stretch"
+                      ShowsPreview="False"/>
+
         <Grid Grid.Column="2"
-              Margin="5,0,0,0">
+              Margin="3,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
