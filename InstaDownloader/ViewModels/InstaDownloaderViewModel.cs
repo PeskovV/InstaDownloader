@@ -18,7 +18,6 @@
         //private ContentViewModel _content;
         private string _contentPath;
         private bool _contentLoaded;
-        private string _finalPhrase;
         private readonly HttpClient _client;
         private bool _busy;
         private bool _defaultCopy;
@@ -35,16 +34,6 @@
         public IAsyncRelayCommand<string> DownloadCommand { get; }
         public IRelayCommand<IList<ContentViewModel>> CopyCommand { get; }
         public IRelayCommand<IList<ContentViewModel>> SaveCommand { get; }
-
-        public string FinalPhrase
-        {
-            get => _finalPhrase;
-            set
-            {
-                SetProperty(ref _finalPhrase, value);
-                Contents?.FirstOrDefault()?.AddDescription(_finalPhrase);
-            }
-        }
 
         public bool DefaultCopy
         {
@@ -103,7 +92,6 @@
             await GetReferences(contentPath);
             await DownloadBytes();
             ContentLoaded = true;
-            AddDescription();
             if(Contents.FirstOrDefault(x => x.MediaType == MediaType.GraphImage) != null && DefaultCopy)
                 CopyCommandExecute(Contents);
             Busy = false;
@@ -116,8 +104,6 @@
             foreach (var content in Contents)
                 await content.DownloadBytes(_client);
         }
-
-        private void AddDescription() => Contents.ToList().ForEach(x => x.AddDescription(FinalPhrase));
 
         private async Task GetReferences(string url)
         {
