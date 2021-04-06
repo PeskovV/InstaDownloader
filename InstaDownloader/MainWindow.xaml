@@ -38,7 +38,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" MinHeight="35" />
                 </Grid.RowDefinitions>
                 <TextBox MinHeight="31" Grid.Row="0"
                          x:Name="ContentPathElement"
@@ -105,10 +104,6 @@
                 <views:ContentControl Grid.Row="3"
                                       Margin="0, 11, 0, 0"
                                       DataContext="{Binding}" />
-
-                <views:FinalPhrases Grid.Row="4"
-                                    Margin="0, 11, 0, 11"
-                                    DataContext="{Binding}" />
             </Grid>
         </Grid>
         <StatusBar Grid.Row="3">
